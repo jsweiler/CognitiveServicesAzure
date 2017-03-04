@@ -28,18 +28,28 @@ namespace CognitiveServicesAzure
             InitializeComponent();
         }
 
-        private void btnAnalyze_Click(object sender, RoutedEventArgs e)
+        private async void btnAnalyze_Click(object sender, RoutedEventArgs e)
         {
             var filePicker = new OpenFileDialog();
             filePicker.Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) | *.jpg; *.jpeg; *.jpe; *.jfif; *.png";
             var result = filePicker.ShowDialog();
-            var imageFile = filePicker.SafeFileName;
+            var imageFile = filePicker.FileName;
             if (!File.Exists(imageFile)) return;
             var binary = GetBytesFromPath(imageFile);
 
             using (var httpClient = new HttpClient())
             {
+                httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "yourAPIKey");
+                var requestParameters = "visualFeatures=Description&language=en";
+                var uri = "https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze?" + requestParameters;
+                using (var content = new ByteArrayContent(binary))
+                {
+                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                    var response = await httpClient.PostAsync(uri, content);
 
+                    var json = await response.Content.ReadAsStringAsync();
+                    txtResults.Text = json;
+                }
             }
         }
 

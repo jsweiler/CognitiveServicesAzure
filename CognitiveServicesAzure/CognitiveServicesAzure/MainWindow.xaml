@@ -8,12 +8,13 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Name="btnAnalyze" Click="btnAnalyze_Click"/>
+        <Button Grid.Row="0" Name="btnAnalyze" Click="btnAnalyze_Click"
+                Content="Analyze"/>
         <TextBox Name="txtResults"
-            Grid.Row="0" AcceptsReturn="True"
+            Grid.Row="1" AcceptsReturn="True"
                  TextWrapping="Wrap"/>
     </Grid>
 </Window>
